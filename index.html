@@ -24,6 +24,64 @@
             --font-display: 'Space Grotesk', sans-serif;
             --font-body: 'Outfit', sans-serif;
             --transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	    --perfil-size: 180px; /* Tamanho da imagem */
+            --glow-color: #ff6b35;
+            --secondary-glow: #00d2ff; /* Tom azul para contraste moderno */
+        }
+
+	.profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px; /* Espaço antes do texto */
+            position: relative;
+            width: var(--perfil-size);
+            height: var(--perfil-size);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* A imagem redonda */
+        .profile-img {
+            width: 90%; /* Ligeiramente menor que o container para dar espaço à borda */
+            height: 90%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--bg-dark);
+            z-index: 2; /* Fica sobre a animação */
+            position: relative;
+        }
+
+        /* O anel de animação moderno */
+        .profile-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            z-index: 1;
+            /* Gradiente cônico para efeito de rotação modern */
+            background: conic-gradient(
+                from 0deg,
+                transparent 20%,
+                var(--secondary-glow) 40%,
+                var(--glow-color) 60%,
+                transparent 80%
+            );
+            animation: rotate-ring 4s linear infinite;
+            filter: blur(8px); /* Efeito de brilho suave */
+            opacity: 0.8;
+        }
+
+        /* Animação de rotação */
+        @keyframes rotate-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         * {
@@ -414,8 +472,14 @@
         </div>
     </nav>
 
-    <header class="hero">
+<header class="hero">
         <div class="container hero-content">
+            
+            <div class="profile-container reveal active">
+                <div class="profile-ring"></div>
+                <img src="/IMAGEM/IGOR.jpg" alt="Igor Pimentel" class="profile-img">
+            </div>
+            
             <p style="color: var(--accent-orange); font-family: monospace; margin-bottom: 15px;">Olá, meu nome é</p>
             <h1>Igor <span class="highlight">Pimentel</span></h1>
             <div class="typewriter">
@@ -801,5 +865,3 @@
     </script>
 </body>
 </html>
-
-
