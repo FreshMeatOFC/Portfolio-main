@@ -11,7 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Space+Grotesk:wght@400;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="./IMAGE/logo_transparente1.png?v=2" type="image/png">
+    <link rel="icon" href="../IMAGE/logo_transparente1.png?v=2" type="image/png">
 
     <style>
         /* =========================================
@@ -329,16 +329,12 @@
 
     <nav>
         <div class="container-nav">
-            <a href="index.html" class="logo">IGOR<span>.</span></a>
+            <a href="../index.html" class="logo">IGOR<span>.</span></a>
             <div class="nav-icons">
-                <a href="index.html" title="Voltar"><i class="fa-solid fa-arrow-left"></i></a>
                 <a href="mailto:dataapex25@gmail.com" title="Contato"><i class="fa-regular fa-envelope"></i></a>
             </div>
         </div>
     </nav>
-
-    <div class="pagination" id="pagination">
-    </div>
 
     <div id="slider-container">
 
@@ -443,12 +439,6 @@
 
                 // Empilha os slides. O Slide 0 fica no fundo.
                 slide.style.zIndex = index;
-
-                // Criação dos dots de paginação
-                const dot = document.createElement('div');
-                dot.classList.add('dot');
-                if (index === 0) dot.classList.add('active');
-                paginationContainer.appendChild(dot);
             });
 
             // Armazena referências rápidas para as metades
@@ -474,7 +464,7 @@
             function render() {
                 // Lerp: Suaviza o movimento para que não pareça "quebrado" no mouse wheel
                 // Quanto menor o número (0.08), mais suave. Quanto maior (1), mais instantâneo.
-                currentProgress += (targetProgress - currentProgress) * 0.1;
+                currentProgress += (targetProgress - currentProgress) * 0.09;
 
                 for (let i = 1; i < numSlides; i++) {
                     // Cálculo do Fator:
@@ -486,12 +476,6 @@
                     halves[i].left.style.transform = `translateX(${-factor * 100}vw)`;
                     halves[i].right.style.transform = `translateX(${factor * 100}vw)`;
                 }
-
-                // Atualizar bolinhas da paginação
-                const activeIndex = Math.round(currentProgress);
-                document.querySelectorAll('.dot').forEach((dot, idx) => {
-                    dot.classList.toggle('active', idx === activeIndex);
-                });
 
                 requestAnimationFrame(render);
             }

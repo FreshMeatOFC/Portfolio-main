@@ -11,7 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Space+Grotesk:wght@400;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="./IMAGE/logo_transparente1.png?v=2" type="image/png">
+    <link rel="icon" href="../IMAGE/logo_transparente1.png?v=2" type="image/png">
 
     <style>
         /* =========================================
@@ -345,13 +345,27 @@
             opacity: 0.6;
             /* Deixa o fundo sutil */
         }
+
+        /* Quando a tela for menor que 768px (celulares e tablets pequenos) */
+        @media (max-width: 768px) {
+            #workspace-canvas {
+                /* Dobra o tamanho do canvas em relação à tela */
+                width: 200vw;
+                height: 200vh;
+
+                /* Encolhe o elemento inteiro pela metade */
+                transform: scale(0.5);
+
+                /* Garante que o encolhimento puxe para o topo/esquerda, evitando bordas vazias */
+                transform-origin: top left;
+            }
+        }
     </style>
 
     <nav>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <a href="index.html" class="logo">IGOR<span>.</span></a>
+            <a href="../index.html" class="logo">IGOR<span>.</span></a>
             <div class="nav-icons">
-                <a href="index.html" title="Voltar"><i class="fa-solid fa-arrow-left"></i></a>
                 <a href="mailto:dataapex25@gmail.com" title="Contato"><i class="fa-regular fa-envelope"></i></a>
             </div>
         </div>
@@ -416,16 +430,13 @@
                 </div>
             </div>
 
-            <div class="app-header reveal"
-                style="transition-delay: 200ms; background: rgba(17, 34, 64, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 40px 30px; display: flex; flex-direction: column;">
-                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <div class="app-card reveal" style="transition-delay: 100ms;">
+                <div class="app-header">
                     <i class="fa-solid fa-cloud-arrow-up app-icon"></i>
-                    <h3
-                        style="font-family: var(--font-display); font-size: 1.4rem; color: var(--text-main); line-height: 1.2;">
-                        Colaboração em Nuvem</h3>
+                    <h3>Colaboração em Nuvem</h3>
                 </div>
-                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">Boas
-                    práticas para acabar com arquivos perdidos e versões desatualizadas, garantindo segurança e fluidez.
+                <p>Boas práticas para acabar com arquivos perdidos e versões desatualizadas, garantindo segurança e
+                    fluidez.
                 </p>
                 <ul class="topics-list">
                     <li><i class="fa-solid fa-check"></i> Co-autoria em tempo real (Docs & Word).</li>
@@ -457,6 +468,43 @@
                 </div>
             </div>
 
+            <div class="app-card reveal">
+                <div class="app-header">
+                    <i class="fa-solid fa-comments app-icon"></i>
+                    <h3>Criação de aplicativos pelo appsheet(no-code)</h3>
+                </div>
+                <p>Apresentando a plataforma de criação de aplicativos pelo appsheet, que permite a criação de
+                    aplicativos sem necessidade de codificação.</p>
+                <ul class="topics-list">
+                    <li><i class="fa-solid fa-check"></i> Criação de formulários e relatórios.</li>
+                    <li><i class="fa-solid fa-check"></i> Criação de dashboards.</li>
+                    <li><i class="fa-solid fa-check"></i> Integração com Google Sheets e Excel.</li>
+                </ul>
+                <div class="tech-stack">
+                    <span class="tech-tag">Appsheet</span>
+                    <span class="tech-tag">Google Sheets</span>
+                </div>
+            </div>
+
+            <div class="app-card reveal">
+                <div class="app-header">
+                    <i class="fa-solid fa-comments app-icon"></i>
+                    <h3>Treinamento de Word e integração com Google Docs</h3>
+                </div>
+                <p>Treinamento de Word e integração com Google Docs, permitindo a criação de documentos e arquivos
+                    no Google Docs.</p>
+                <ul class="topics-list">
+                    <li><i class="fa-solid fa-check"></i> Criação de documentos e arquivos no Google Docs.</li>
+                    <li><i class="fa-solid fa-check"></i> Integração com Google Sheets e Excel.</li>
+                    <li><i class="fa-solid fa-check"></i> Integração com Google Forms.</li>
+                </ul>
+                <div class="tech-stack">
+                    <span class="tech-tag">Google Docs</span>
+                    <span class="tech-tag">Google Sheets</span>
+                    <span class="tech-tag">Google Forms</span>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -473,7 +521,7 @@
 
             let width, height;
             let windows = [];
-            const NUM_WINDOWS = 12; // Quantidade de janelas flutuando
+            const NUM_WINDOWS = 18; // Quantidade de janelas flutuando
 
             function resize() {
                 width = canvas.width = window.innerWidth;
