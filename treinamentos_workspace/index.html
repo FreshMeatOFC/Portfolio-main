@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Igor Pimentel | Treinamentos Workspace & M365</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Space+Grotesk:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="./IMAGE/logo_transparente1.png?v=2" type="image/png">
+
+    <style>
+        /* =========================================
+           VARIAVEIS E RESET
+           ========================================= */
+        :root {
+            --bg-dark: #0a1525;
+            --bg-card: #112240;
+            --primary-blue: #1d3557;
+            --accent-orange: #ff6b35;
+            --accent-glow: rgba(255, 107, 53, 0.4);
+            --text-main: #e6f1ff;
+            --text-secondary: #8892b0;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Gradiente de fundo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at top left, rgba(29, 53, 87, 0.3) 0%, rgba(10, 21, 37, 1) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+           NAVBAR
+           ========================================= */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 21, 37, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            padding-left: 20px;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-orange);
+        }
+
+        .nav-icons {
+            padding-right: 20px;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-icons a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .nav-icons a:hover {
+            color: var(--accent-orange);
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            margin-top: 60px;
+            z-index: 2;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .hero-content {
+            background: rgba(10, 21, 37, 0.6);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero-content h1 .highlight {
+            color: var(--accent-orange);
+        }
+
+        .hero-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .typewriter {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-main);
+            margin-bottom: 20px;
+            font-family: monospace;
+            min-height: 1.6em;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: var(--accent-orange);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* =========================================
+           PROJECTS GRID
+           ========================================= */
+        .projects-section {
+            padding: 60px 0 100px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-orange);
+            margin: 15px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .app-card {
+            background: rgba(17, 34, 64, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-orange);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 107, 53, 0.4);
+        }
+
+        .app-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .app-icon {
+            font-size: 2.2rem;
+            color: var(--accent-orange);
+            background: rgba(255, 107, 53, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .app-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .app-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .topics-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .topics-list li {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .topics-list li i {
+            color: var(--accent-orange);
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .tech-tag {
+            background: rgba(29, 53, 87, 0.6);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="workspace-canvas"></canvas>
+    <style>
+        #workspace-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+            /* Deixa o fundo sutil */
+        }
+    </style>
+
+    <nav>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="index.html" class="logo">IGOR<span>.</span></a>
+            <div class="nav-icons">
+                <a href="index.html" title="Voltar"><i class="fa-solid fa-arrow-left"></i></a>
+                <a href="mailto:dataapex25@gmail.com" title="Contato"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container hero-content reveal active">
+            <p
+                style="color: var(--accent-orange); font-family: monospace; margin-bottom: 10px; font-size: 1rem; letter-spacing: 2px;">
+                CAPACITAÇÃO & PRODUTIVIDADE</p>
+            <h1>Treinamentos <br><span class="highlight">Corporativos</span></h1>
+
+            <div class="typewriter">
+                Dominando o <span id="typewriter-text"></span><span class="cursor">|</span>
+            </div>
+
+            <p class="hero-desc">
+                Muito além de ensinar a usar botões. Meus treinamentos transformam equipes operacionais em times
+                analíticos, focados em automação, colaboração em nuvem e organização de dados estruturados.
+            </p>
+        </div>
+    </header>
+
+    <section class="projects-section container">
+        <h2 class="section-title reveal">Trilhas de Conhecimento</h2>
+
+        <div class="app-grid">
+
+            <div class="app-card reveal">
+                <div class="app-header">
+                    <i class="fa-solid fa-file-excel app-icon"></i>
+                    <h3>Excel & Google Sheets Avançado</h3>
+                </div>
+                <p>Capacitação focada em análise de dados. Do básico ao desenvolvimento de painéis gerenciais e
+                    cruzamento de informações.</p>
+                <ul class="topics-list">
+                    <li><i class="fa-solid fa-check"></i> Fórmulas lógicas, PROCV, XLOOKUP e Matrizes.</li>
+                    <li><i class="fa-solid fa-check"></i> Tabelas Dinâmicas e gráficos para Dashboards.</li>
+                    <li><i class="fa-solid fa-check"></i> Tratamento e limpeza de bases de dados sujas.</li>
+                </ul>
+                <div class="tech-stack">
+                    <span class="tech-tag">Microsoft Excel</span>
+                    <span class="tech-tag">Google Sheets</span>
+                </div>
+            </div>
+
+            <div class="app-card reveal" style="transition-delay: 100ms;">
+                <div class="app-header">
+                    <i class="fa-solid fa-gears app-icon"></i>
+                    <h3>Automação de Rotinas (No-Code)</h3>
+                </div>
+                <p>Treinamento para eliminar tarefas repetitivas integrando os aplicativos do ecossistema para
+                    trabalharem sozinhos.</p>
+                <ul class="topics-list">
+                    <li><i class="fa-solid fa-check"></i> Fluxos de aprovação com Power Automate.</li>
+                    <li><i class="fa-solid fa-check"></i> Integração Forms > Sheets > Disparo de E-mail.</li>
+                    <li><i class="fa-solid fa-check"></i> Introdução a macros e Google Apps Script.</li>
+                </ul>
+                <div class="tech-stack">
+                    <span class="tech-tag">Power Automate</span>
+                    <span class="tech-tag">Apps Script</span>
+                </div>
+            </div>
+
+            <div class="app-header reveal"
+                style="transition-delay: 200ms; background: rgba(17, 34, 64, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 40px 30px; display: flex; flex-direction: column;">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <i class="fa-solid fa-cloud-arrow-up app-icon"></i>
+                    <h3
+                        style="font-family: var(--font-display); font-size: 1.4rem; color: var(--text-main); line-height: 1.2;">
+                        Colaboração em Nuvem</h3>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1;">Boas
+                    práticas para acabar com arquivos perdidos e versões desatualizadas, garantindo segurança e fluidez.
+                </p>
+                <ul class="topics-list">
+                    <li><i class="fa-solid fa-check"></i> Co-autoria em tempo real (Docs & Word).</li>
+                    <li><i class="fa-solid fa-check"></i> Estruturação inteligente de pastas no Drive/OneDrive.</li>
+                    <li><i class="fa-solid fa-check"></i> Gestão de permissões e segurança da informação.</li>
+                </ul>
+                <div class="tech-stack">
+                    <span class="tech-tag">Google Drive</span>
+                    <span class="tech-tag">SharePoint</span>
+                </div>
+            </div>
+
+            <div class="app-card reveal">
+                <div class="app-header">
+                    <i class="fa-solid fa-comments app-icon"></i>
+                    <h3>Comunicação & Gestão de Projetos</h3>
+                </div>
+                <p>Alinhamento de equipes através da centralização da comunicação e do acompanhamento visual de tarefas
+                    corporativas.</p>
+                <ul class="topics-list">
+                    <li><i class="fa-solid fa-check"></i> Organização de canais e arquivos no MS Teams.</li>
+                    <li><i class="fa-solid fa-check"></i> Gestão ágil de tarefas no Planner / Trello.</li>
+                    <li><i class="fa-solid fa-check"></i> Produtividade no gerenciamento de E-mails (Outlook/Gmail).
+                    </li>
+                </ul>
+                <div class="tech-stack">
+                    <span class="tech-tag">MS Teams</span>
+                    <span class="tech-tag">Planner</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer
+        style="text-align: center; padding: 50px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-secondary);">
+        <p>Desenvolvido por Igor Pimentel | Data Apex &copy; 2026</p>
+    </footer>
+
+    <script>
+        // === CANVAS: Animação de Documentos e Planilhas ===
+        (function () {
+            const canvas = document.getElementById('workspace-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let windows = [];
+            const NUM_WINDOWS = 12; // Quantidade de janelas flutuando
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Utilitário para desenhar retângulos arredondados
+            function roundRect(x, y, w, h, radius) {
+                ctx.beginPath();
+                ctx.moveTo(x + radius, y);
+                ctx.lineTo(x + w - radius, y);
+                ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+                ctx.lineTo(x + w, y + h - radius);
+                ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+                ctx.lineTo(x + radius, y + h);
+                ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+                ctx.lineTo(x, y + radius);
+                ctx.quadraticCurveTo(x, y, x + radius, y);
+                ctx.closePath();
+            }
+
+            class UIWindow {
+                constructor() {
+                    this.reset();
+                    // Distribuir inicialmente pela tela toda
+                    this.y = Math.random() * height;
+                }
+
+                reset() {
+                    // Decide se é um Documento (texto) ou Planilha (grade)
+                    this.type = Math.random() > 0.5 ? 'doc' : 'sheet';
+
+                    this.w = this.type === 'doc' ? 200 + Math.random() * 100 : 250 + Math.random() * 150;
+                    this.h = this.type === 'doc' ? 250 + Math.random() * 100 : 200 + Math.random() * 100;
+
+                    this.x = Math.random() * (width - this.w);
+                    this.y = height + 100; // Nasce embaixo
+
+                    // Velocidade de subida (Parallax: menores sobem mais devagar)
+                    this.scale = 0.5 + Math.random() * 0.7;
+                    this.vy = -(0.2 + Math.random() * 0.5) * this.scale;
+
+                    // Configuração de Preenchimento (Animação interna)
+                    this.elements = [];
+
+                    if (this.type === 'doc') {
+                        // Criar "linhas de texto" que vão digitar
+                        const numLines = Math.floor((this.h - 60) / 20);
+                        for (let i = 0; i < numLines; i++) {
+                            this.elements.push({
+                                maxWidth: (this.w - 40) * (0.5 + Math.random() * 0.5),
+                                currentWidth: 0,
+                                speed: 1 + Math.random() * 3,
+                                delay: i * 30 // Delay em frames para digitar linha por linha
+                            });
+                        }
+                    } else {
+                        // Criar "células" da planilha
+                        const cols = 4;
+                        const rows = Math.floor((this.h - 40) / 25);
+                        for (let r = 0; r < rows; r++) {
+                            for (let c = 0; c < cols; c++) {
+                                this.elements.push({
+                                    r: r, c: c,
+                                    filled: false,
+                                    fillTime: Math.random() * 300 // Frame em que será preenchida
+                                });
+                            }
+                        }
+                    }
+                    this.age = 0;
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.scale(this.scale, this.scale);
+
+                    // Fundo da Janela (Glassmorphism sutil)
+                    ctx.fillStyle = 'rgba(17, 34, 64, 0.4)';
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                    ctx.lineWidth = 2;
+                    roundRect(0, 0, this.w, this.h, 10);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Barra superior (Header)
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+                    roundRect(0, 0, this.w, 30, 10);
+                    ctx.fill();
+
+                    // Ícone/Cor do Header
+                    ctx.fillStyle = this.type === 'doc' ? 'rgba(0, 150, 255, 0.6)' : 'rgba(0, 200, 100, 0.6)';
+                    ctx.fillRect(15, 10, 10, 10);
+
+                    // Desenho do Conteúdo
+                    if (this.type === 'doc') {
+                        // Desenhar linhas de texto (typing effect)
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                        this.elements.forEach((line, index) => {
+                            if (this.age > line.delay) {
+                                if (line.currentWidth < line.maxWidth) {
+                                    line.currentWidth += line.speed; // "Digitando"
+                                }
+                                ctx.fillRect(20, 50 + (index * 20), line.currentWidth, 8);
+                            }
+                        });
+                    } else {
+                        // Desenhar grade da planilha
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                        ctx.lineWidth = 1;
+                        const cellW = (this.w - 20) / 4;
+                        const cellH = 25;
+
+                        this.elements.forEach(cell => {
+                            const cx = 10 + (cell.c * cellW);
+                            const cy = 40 + (cell.r * cellH);
+
+                            // Desenha borda da célula
+                            ctx.strokeRect(cx, cy, cellW, cellH);
+
+                            // Verifica se é hora de "preencher" a célula com dados
+                            if (this.age > cell.fillTime) {
+                                cell.filled = true;
+                            }
+
+                            if (cell.filled) {
+                                // Cores que remetem a gráficos/dados
+                                ctx.fillStyle = Math.random() > 0.8 ? 'rgba(255, 107, 53, 0.5)' : 'rgba(255, 255, 255, 0.15)';
+                                // Preenche a célula (com pequena margem)
+                                ctx.fillRect(cx + 2, cy + 2, cellW - 4, cellH - 4);
+                                // Para não ficar trocando de cor todo frame, desativa o tempo
+                                cell.fillTime = Infinity;
+                            }
+                        });
+                    }
+
+                    ctx.restore();
+                }
+
+                update() {
+                    this.y += this.vy;
+                    this.age++;
+
+                    // Se saiu totalmente da tela por cima, reseta lá embaixo
+                    if (this.y + (this.h * this.scale) < 0) {
+                        this.reset();
+                    }
+                }
+            }
+
+            // Inicializar array
+            for (let i = 0; i < NUM_WINDOWS; i++) {
+                windows.push(new UIWindow());
+            }
+
+            // Loop de Animação
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < windows.length; i++) {
+                    windows[i].update();
+                    windows[i].draw();
+                }
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // === Typewriter Effect ===
+        const textElement = document.getElementById('typewriter-text');
+        const phrases = [
+            "Microsoft Excel.",
+            "Google Sheets.",
+            "Power Automate.",
+            "MS Teams & Planner.",
+            "Google Workspace."
+        ];
+
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+
+            if (isDeleting) {
+                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 40;
+            } else {
+                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 80;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typeSpeed = 2000;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+        document.addEventListener('DOMContentLoaded', type);
+
+        // === Scroll Reveal ===
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+        revealElements.forEach(element => revealObserver.observe(element));
+
+    </script>
+</body>
+
+</html>

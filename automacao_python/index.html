@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Igor Pimentel | Automação Python</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Space+Grotesk:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="./IMAGE/logo_transparente1.png?v=2" type="image/png">
+
+    <style>
+        /* =========================================
+           VARIAVEIS E RESET (DATA APEX)
+           ========================================= */
+        :root {
+            --bg-dark: #0a1525;
+            --bg-card: #112240;
+            --primary-blue: #1d3557;
+            --accent-orange: #ff6b35;
+            --accent-glow: rgba(255, 107, 53, 0.4);
+            --text-main: #e6f1ff;
+            --text-secondary: #8892b0;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Fundo base */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, rgba(29, 53, 87, 0.3) 0%, rgba(10, 21, 37, 1) 80%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+           NAVBAR
+           ========================================= */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 21, 37, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            padding-left: 20px;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-orange);
+        }
+
+        .nav-icons {
+            padding-right: 20px;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-icons a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .nav-icons a:hover {
+            color: var(--accent-orange);
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            margin-top: 60px;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero-content h1 .highlight {
+            color: var(--accent-orange);
+        }
+
+        .hero-desc {
+            max-width: 650px;
+            margin: 0 auto 30px auto;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .typewriter {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-main);
+            margin-bottom: 40px;
+            font-family: monospace;
+            min-height: 1.6em;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: var(--accent-orange);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* =========================================
+           PROJECTS GRID
+           ========================================= */
+        .projects-section {
+            padding: 60px 0 100px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-orange);
+            margin: 15px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .app-card {
+            background: rgba(17, 34, 64, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-orange);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 107, 53, 0.3);
+        }
+
+        .app-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .app-icon {
+            font-size: 2.5rem;
+            color: var(--accent-orange);
+        }
+
+        .app-links a {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .app-links a:hover {
+            color: var(--text-main);
+        }
+
+        .app-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .app-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .tech-tag {
+            background: rgba(29, 53, 87, 0.8);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="network-canvas"></canvas>
+    <style>
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            /* Permite clicar no site normalmente */
+        }
+    </style>
+
+    <nav>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="index.html" class="logo">IGOR<span>.</span></a>
+            <div class="nav-icons">
+                <a href="index.html" title="Voltar"><i class="fa-solid fa-arrow-left"></i></a>
+                <a href="mailto:dataapex25@gmail.com" title="Contato"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container hero-content reveal active">
+            <p
+                style="color: var(--accent-orange); font-family: monospace; margin-bottom: 15px; font-size: 1.1rem; letter-spacing: 2px;">
+                <i class="fa-brands fa-python"></i> SCRIPTS & BOTS
+            </p>
+            <h1>Automação <span class="highlight">Python</span></h1>
+
+            <div class="typewriter">
+                Desenvolvendo soluções com <span id="typewriter-text"></span><span class="cursor">|</span>
+            </div>
+
+            <p class="hero-desc">
+                Automatizando o que é repetitivo e extraindo inteligência de dados complexos. Criação de robôs de
+                navegação, manipulação de arquivos em massa e integração de sistemas legados.
+            </p>
+        </div>
+    </header>
+
+    <section class="projects-section container">
+        <h2 class="section-title reveal">Projetos Python</h2>
+
+        <div class="app-grid">
+
+            <div class="app-card reveal">
+                <div class="app-header">
+                    <i class="fa-solid fa-spider app-icon"></i>
+                    <div class="app-links"><a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+                <h3>Web Scraping & Robôs (RPA)</h3>
+                <p>Navegação autônoma em portais governamentais e sistemas ERP para extração e inserção de dados,
+                    simulando comportamento humano para evitar bloqueios.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Selenium</span>
+                    <span class="tech-tag">Playwright</span>
+                    <span class="tech-tag">BeautifulSoup</span>
+                </div>
+            </div>
+
+            <div class="app-card reveal" style="transition-delay: 100ms;">
+                <div class="app-header">
+                    <i class="fa-solid fa-file-pdf app-icon"></i>
+                    <div class="app-links"><a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+                <h3>Manipulador e Assinador PDF</h3>
+                <p>Aplicação desktop criada para o setor de segurança. Mescla centenas de PDFs, aplica assinaturas
+                    digitais criptografadas e organiza diretórios com um clique.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">pyHanko</span>
+                    <span class="tech-tag">pypdf</span>
+                    <span class="tech-tag">Flet (GUI)</span>
+                </div>
+            </div>
+
+            <div class="app-card reveal" style="transition-delay: 200ms;">
+                <div class="app-header">
+                    <i class="fa-solid fa-database app-icon"></i>
+                    <div class="app-links"><a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+                </div>
+                <h3>Pipelines de Dados (ETL)</h3>
+                <p>Scripts rodando em nuvem que limpam planilhas sujas, transformam dados e alimentam bancos de dados
+                    PostgreSQL para atualizar os Dashboards da Data Apex em tempo real.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Pandas</span>
+                    <span class="tech-tag">SQLAlchemy</span>
+                    <span class="tech-tag">Cron Jobs</span>
+                </div>
+            </div>
+
+            <div class="app-card reveal">
+                <div class="app-header">
+                    <i class="fa-solid fa-envelope-open-text app-icon"></i>
+                    <div class="app-links"><a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+                <h3>Automação de Relatórios & E-mails</h3>
+                <p>Sistema que gera relatórios analíticos dinâmicos em PDF a partir de bases de dados e dispara
+                    automaticamente para os diretores e clientes via protocolo SMTP.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">smtplib</span>
+                    <span class="tech-tag">ReportLab</span>
+                    <span class="tech-tag">Jinja2</span>
+                </div>
+            </div>
+
+            <div class="app-card reveal" style="transition-delay: 100ms;">
+                <div class="app-header">
+                    <i class="fa-solid fa-plug-circle-bolt app-icon"></i>
+                    <div class="app-links"><a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+                <h3>Integração de APIs REST</h3>
+                <p>Criação de pontes de comunicação entre softwares distintos. Scripts Python que capturam alertas de
+                    segurança e enviam mensagens automáticas para o Microsoft Teams ou WhatsApp.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Requests</span>
+                    <span class="tech-tag">FastAPI</span>
+                    <span class="tech-tag">JSON</span>
+                </div>
+            </div>
+
+            <div class="app-card reveal" style="transition-delay: 200ms;">
+                <div class="app-header">
+                    <i class="fa-solid fa-brain app-icon"></i>
+                    <div class="app-links"><a href="./projeto_ia/" class="fa-solid fa-arrow-up-right-from-square"></a>
+                    </div>
+                </div>
+                <h3>IA e LLMs Customizados</h3>
+                <p>Desenvolvimento de agentes conversacionais abastecidos com Normas Regulamentadoras (RAG) utilizando
+                    bibliotecas Python de inteligência artificial.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">LangChain</span>
+                    <span class="tech-tag">OpenAI API</span>
+                    <span class="tech-tag">Streamlit</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer
+        style="text-align: center; padding: 50px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-secondary); margin-top: 40px;">
+        <p>Desenvolvido por Igor Pimentel | Data Apex &copy; 2026</p>
+    </footer>
+
+    <script>
+        // === CANVAS: CONSTELAÇÃO DE NÓS (REDE NEURAL / APIs) ===
+        (function () {
+            const canvas = document.getElementById('network-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+
+            // Configurações da Constelação
+            const NUM_PARTICLES = 80; // Quantidade de nós flutuantes
+            const CONNECTION_DISTANCE = 150; // Distância máxima para conectar nós
+            const MOUSE_CONNECTION_DISTANCE = 200; // Distância que o mouse alcança
+
+            let mouse = { x: null, y: null };
+
+            // Ajustar Canvas
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Rastrear Mouse
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+            window.addEventListener('mouseout', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            // Classe da Partícula (Nó)
+            class Node {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    // Velocidade de flutuação bem suave
+                    this.vx = (Math.random() - 0.5) * 1.5;
+                    this.vy = (Math.random() - 0.5) * 1.5;
+                    this.radius = Math.random() * 1.5 + 1; // Tamanho do ponto
+
+                    // Cores (A maioria sutil, alguns com o Laranja Data Apex)
+                    this.isAccent = Math.random() > 0.85;
+                    this.color = this.isAccent ? 'rgba(255, 107, 53, 0.8)' : 'rgba(136, 146, 176, 0.4)';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Rebater suavemente nas bordas
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    if (this.isAccent) {
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = 'rgba(255, 107, 53, 0.6)';
+                    }
+                    ctx.fill();
+                    ctx.shadowBlur = 0; // Reset
+                }
+            }
+
+            // Inicializar Nós
+            for (let i = 0; i < NUM_PARTICLES; i++) {
+                particles.push(new Node());
+            }
+
+            // Loop de Animação
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Atualizar e Desenhar cada nó
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+
+                    // Conectar Partículas umas às outras
+                    for (let j = i + 1; j < particles.length; j++) {
+                        let dx = particles[i].x - particles[j].x;
+                        let dy = particles[i].y - particles[j].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < CONNECTION_DISTANCE) {
+                            // Opacidade baseada na proximidade
+                            let opacity = 1 - (distance / CONNECTION_DISTANCE);
+                            // Linha sutil azulada
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(136, 146, 176, ${opacity * 0.2})`;
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Conectar Partículas ao Mouse
+                    if (mouse.x !== null) {
+                        let dxMouse = particles[i].x - mouse.x;
+                        let dyMouse = particles[i].y - mouse.y;
+                        let distanceMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+
+                        if (distanceMouse < MOUSE_CONNECTION_DISTANCE) {
+                            let opacity = 1 - (distanceMouse / MOUSE_CONNECTION_DISTANCE);
+                            ctx.beginPath();
+                            // Feixes que ligam ao mouse ganham o tom Laranja
+                            ctx.strokeStyle = `rgba(255, 107, 53, ${opacity * 0.5})`;
+                            ctx.lineWidth = 1.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // === Typewriter Effect ===
+        const textElement = document.getElementById('typewriter-text');
+        const phrases = [
+            "Pandas & Manipulação.",
+            "Selenium & Playwright.",
+            "Requests & APIs.",
+            "os & shutil (Arquivos).",
+            "Flet (Desktop UI).",
+            "Código Limpo."
+        ];
+
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+
+            if (isDeleting) {
+                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 40;
+            } else {
+                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 80;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typeSpeed = 2000;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+        document.addEventListener('DOMContentLoaded', type);
+
+        // === Scroll Reveal ===
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+        revealElements.forEach(element => revealObserver.observe(element));
+
+    </script>
+</body>
+
+</html>
