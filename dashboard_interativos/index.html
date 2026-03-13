@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Igor Pimentel | Dashboards Interativos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Space+Grotesk:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="./IMAGE/logo_transparente1.png?v=2" type="image/png">
+
+    <style>
+        /* =========================================
+           VARIAVEIS E RESET
+           ========================================= */
+        :root {
+            --bg-dark: #0a1525;
+            --bg-card: #112240;
+            --primary-blue: #1d3557;
+            --accent-orange: #ff6b35;
+            --accent-glow: rgba(255, 107, 53, 0.4);
+            --text-main: #e6f1ff;
+            --text-secondary: #8892b0;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Fundo com leve gradiente radial para simular o "espaço" */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, rgba(29, 53, 87, 0.4) 0%, rgba(10, 21, 37, 1) 80%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+           NAVBAR
+           ========================================= */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 21, 37, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            padding-left: 20px;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-orange);
+        }
+
+        .nav-icons {
+            padding-right: 20px;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-icons a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .nav-icons a:hover {
+            color: var(--accent-orange);
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+           HERO SECTION: ZERO GRAVITY LOGIC
+           ========================================= */
+        /* O track tem altura extra para permitir o scroll de montagem */
+        #zero-g-track {
+            height: 200vh;
+            width: 100%;
+            position: relative;
+        }
+
+        /* O container sticky fica preso na tela enquanto o track rola */
+        .sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #zero-g-text {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+            z-index: 2;
+            pointer-events: none;
+            /* Para não atrapalhar o scroll */
+            /* Flexbox para manter as letras na linha correta quando montadas */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        /* Cada letra isolada */
+        .char {
+            display: inline-block;
+            will-change: transform;
+            /* Cor padrão, mas o JS vai pintar algumas de laranja */
+            color: var(--text-main);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .char.highlight {
+            color: var(--accent-orange);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .space {
+            width: clamp(10px, 2vw, 20px);
+            display: inline-block;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-text {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            font-family: var(--font-display);
+            color: var(--accent-orange);
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0) translateX(-50%);
+            }
+
+            40% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+
+            60% {
+                transform: translateY(-5px) translateX(-50%);
+            }
+        }
+
+        /* =========================================
+           PROJECTS GRID
+           ========================================= */
+        .projects-section {
+            padding: 80px 0 100px 0;
+            background-color: var(--bg-dark);
+            position: relative;
+            z-index: 10;
+            /* Fica por cima do efeito parallax quando rola */
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-orange);
+            margin: 15px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .app-card {
+            background: rgba(17, 34, 64, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-orange);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 107, 53, 0.3);
+        }
+
+        .app-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .app-icon {
+            font-size: 2.5rem;
+            color: var(--accent-orange);
+        }
+
+        .app-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .app-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tech-tag {
+            background: rgba(29, 53, 87, 0.8);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="index.html" class="logo">IGOR<span>.</span></a>
+            <div class="nav-icons">
+                <a href="index.html" title="Voltar"><i class="fa-solid fa-arrow-left"></i></a>
+                <a href="mailto:dataapex25@gmail.com" title="Contato"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="zero-g-track">
+        <div class="sticky-container">
+            <div id="zero-g-text">
+                <span class="word">Dashboards</span>
+                <span class="word highlight">Interativos</span>
+            </div>
+
+            <p id="hero-subtitle"
+                style="color: var(--text-secondary); margin-top: 20px; font-size: 1.2rem; max-width: 600px; text-align: center; opacity: 0; transition: opacity 0.5s;">
+                Transformando dados bagunçados de segurança e negócios em decisões visuais, rápidas e precisas.
+            </p>
+
+            <div class="scroll-indicator" id="scroll-hint">
+                <i class="fa-solid fa-angles-down"
+                    style="font-size: 1.5rem; color: var(--accent-orange); margin-bottom: 8px;"></i>
+                <span class="scroll-text">ROLAR PARA MONTAR</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="projects-section">
+        <div class="container">
+            <h2 class="section-title reveal">Visualização de Dados</h2>
+
+            <div class="app-grid">
+
+                <div class="app-card reveal">
+                    <div class="app-header">
+                        <i class="fa-solid fa-triangle-exclamation app-icon"></i>
+                    </div>
+                    <h3>Painel de Gestão de Acidentes e Incidentes</h3>
+                    <p>Dashboard focado no cruzamento de dados de incidentes industriais. Identifica padrões de risco,
+                        locais de alta incidência e gera relatórios preditivos para tomada de decisão proativa de SST.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">PowerBI</span>
+                        <span class="tech-tag">SQL</span>
+                        <span class="tech-tag">Excel Avançado</span>
+                    </div>
+                </div>
+
+                <div class="app-card reveal" style="transition-delay: 100ms;">
+                    <div class="app-header">
+                        <i class="fa-solid fa-chart-line app-icon"></i>
+                    </div>
+                    <h3>Data Apex Analytics</h3>
+                    <p>Interface web interativa para acompanhamento do funil de vendas, geração de propostas comerciais
+                        (planos de R$800 a R$1.200) e visualização do faturamento da consultoria em tempo real.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">Pandas</span>
+                    </div>
+                </div>
+
+                <div class="app-card reveal" style="transition-delay: 200ms;">
+                    <div class="app-header">
+                        <i class="fa-solid fa-users-gear app-icon"></i>
+                    </div>
+                    <h3>Monitoramento de Brigada e Treinamentos</h3>
+                    <p>Painel de controle de prontidão. Monitora a validade de treinamentos (NRs), certificações ativas
+                        de resgate em altura e escala tática da equipe de resposta a emergências.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Looker Studio</span>
+                        <span class="tech-tag">Automação</span>
+                        <span class="tech-tag">AppSheet</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer
+        style="text-align: center; padding: 50px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-secondary); background: var(--bg-dark);">
+        <p>Desenvolvido por Igor Pimentel | Data Apex &copy; 2026</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('zero-g-track');
+            const words = document.querySelectorAll('.word');
+            const subtitle = document.getElementById('hero-subtitle');
+            const scrollHint = document.getElementById('scroll-hint');
+
+            let charsData = [];
+
+            // 1. Preparar o texto: Quebrar palavras em letras (spans)
+            words.forEach(wordSpan => {
+                const text = wordSpan.innerText;
+                const isHighlight = wordSpan.classList.contains('highlight');
+                wordSpan.innerHTML = ''; // Limpa o texto original
+
+                // Adiciona espaço após a primeira palavra
+                if (!isHighlight) {
+                    wordSpan.style.marginRight = "15px";
+                }
+
+                // Cria um span para cada letra
+                for (let i = 0; i < text.length; i++) {
+                    const charSpan = document.createElement('span');
+                    charSpan.innerText = text[i];
+                    charSpan.className = 'char';
+                    if (isHighlight) charSpan.classList.add('highlight');
+
+                    wordSpan.appendChild(charSpan);
+
+                    // Gerar vetores aleatórios (Posição X, Y e Rotação) para a Gravidade Zero
+                    // Os valores espalham as letras pela tela toda
+                    const randomX = (Math.random() - 0.5) * window.innerWidth * 1.5;
+                    const randomY = (Math.random() - 0.5) * window.innerHeight * 1.5;
+                    const randomRot = (Math.random() - 0.5) * 720; // Até duas voltas completas
+
+                    // Parâmetros para a flutuação contínua (onda)
+                    const phase = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 0.1 + 0.05;
+
+                    charsData.push({
+                        element: charSpan,
+                        rx: randomX,
+                        ry: randomY,
+                        rRot: randomRot,
+                        phase: phase,
+                        speed: speed
+                    });
+                }
+            });
+
+            // 2. Loop de Animação (Frame a Frame)
+            function animateZeroGravity() {
+                // Descobrir o progresso do scroll no track do Hero
+                // Track = 200vh. Se scrollarmos 100vh, a animação atinge 100%.
+                const scrollY = window.scrollY;
+                const windowHeight = window.innerHeight;
+
+                // Progress vai de 0 (topo) a 1 (100vh de scroll)
+                let rawProgress = scrollY / windowHeight;
+                let progress = Math.min(Math.max(rawProgress, 0), 1);
+
+                // Curva de suavização para as letras encaixarem de forma suave no final
+                let easeProgress = progress * (2 - progress); // easeOutQuad
+
+                // "scatter" é a quantidade de caos. 1 = Totalmente solto. 0 = Montado no texto real.
+                let scatter = 1 - easeProgress;
+
+                // Ocultar/Mostrar o subtítulo e a dica de scroll
+                if (progress > 0.8) {
+                    subtitle.style.opacity = (progress - 0.8) * 5; // Fade in no final
+                    scrollHint.style.opacity = 0; // Some a dica
+                } else {
+                    subtitle.style.opacity = 0;
+                    scrollHint.style.opacity = 0.6 * scatter;
+                }
+
+                const time = Date.now() * 0.001;
+
+                // Atualizar cada letra
+                charsData.forEach(char => {
+                    // Cálculo da flutuação contínua (Senoide)
+                    // A flutuação diminui conforme o scatter chega a 0
+                    const floatX = Math.sin(time * char.speed + char.phase) * 50 * scatter;
+                    const floatY = Math.cos(time * char.speed + char.phase) * 50 * scatter;
+                    const floatRot = Math.sin(time * char.speed + char.phase) * 90 * scatter;
+
+                    // Interpolação entre a posição aleatória no espaço e a posição 0,0 do documento original
+                    const x = (char.rx * scatter) + floatX;
+                    const y = (char.ry * scatter) + floatY;
+                    const rot = (char.rRot * scatter) + floatRot;
+
+                    char.element.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+                });
+
+                requestAnimationFrame(animateZeroGravity);
+            }
+
+            // Iniciar o loop
+            animateZeroGravity();
+
+            // Garantir que a página recarregue no topo para não estragar o efeito
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+        });
+
+        // === Scroll Reveal Animation para os Cards ===
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+        revealElements.forEach(element => revealObserver.observe(element));
+
+    </script>
+</body>
+
+</html>
