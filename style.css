@@ -172,12 +172,10 @@ body::after {
 }
 
 /* =========================================
-    NAVBAR
-    ========================================= */
+   NAVBAR
+   ========================================= */
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    /* REMOVA o display: flex, justify-content e align-items daqui */
     padding: 20px 0;
     position: fixed;
     width: 100%;
@@ -187,6 +185,17 @@ nav {
     background: rgba(10, 21, 37, 0.8);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* ADICIONE esta classe para controlar a largura e o alinhamento */
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 85%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
 
 .logo {
     font-family: var(--font-display);
