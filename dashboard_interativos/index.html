@@ -336,6 +336,127 @@
             font-family: monospace;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* =========================================
+   Estilos do Dropdown de Navegação
+   ========================================= */
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            background-color: transparent;
+            color: var(--text-main, #ffffff);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Efeito sutil ao passar o mouse no botão principal */
+        .dropbtn:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Gira a setinha ao fazer o hover no menu */
+        .dropdown:hover .dropbtn i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        /* Caixa do menu suspenso */
+        .dropdown-content {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(15px);
+            /* Começa um pouco para baixo para o efeito de entrada */
+            background-color: #1a1a1a;
+            /* Altere para a cor de fundo do seu site/card */
+            min-width: 250px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 10px 0;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            right: 0;
+            transform: translateY(15px);
+
+            /* Animação suave */
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Faz o menu aparecer ao passar o mouse na div pai */
+        .dropdown:hover .dropdown-content {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(5px);
+        }
+
+        /* Estilo dos links dentro do menu */
+        .dropdown-content a {
+            color: var(--text-main, #cccccc);
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-content a i {
+            color: #888888;
+            width: 20px;
+            text-align: center;
+            transition: color 0.2s ease;
+        }
+
+        /* Efeito ao passar o mouse nos itens do menu */
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            padding-left: 25px;
+            /* Leve deslocamento para a direita no hover */
+        }
+
+        .dropdown-content a:hover i {
+            color: #ffffff;
+            /* O ícone acende acompanhando o texto */
+        }
+
+        /* =========================================
+   Ajuste do Dropdown para Celulares
+   ========================================= */
+        @media (max-width: 768px) {
+            .dropdown-content {
+                /* Muda a posição para fixa na tela, ignorando o botão */
+                position: fixed;
+                top: 70px;
+                /* Ajuste este valor de acordo com a altura do seu <nav> */
+                left: 5%;
+                right: auto;
+                width: 90%;
+                /* Faz o menu ocupar quase toda a largura da tela */
+                min-width: auto;
+                transform: translateY(15px);
+            }
+
+            /* Garante que a animação funcione corretamente no celular ao tocar */
+            .dropdown:hover .dropdown-content,
+            .dropdown:focus-within .dropdown-content {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -343,9 +464,34 @@
 
     <nav>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+
             <a href="../index.html" class="logo">IGOR<span>.</span></a>
-            <div class="nav-icons">
-                <a href="mailto:dataapex25@gmail.com" title="Contato"><i class="fa-regular fa-envelope"></i></a>
+
+            <div style="display: flex; align-items: center; gap: 20px; padding-right: 20px;">
+
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        Projetos <i class="fa-solid fa-chevron-down"
+                            style="font-size: 0.8em; margin-left: 5px; transition: transform 0.3s;"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="../automacao_python/index.html"><i class="fa-regular fa-folder-open"></i> Automação
+                            Python</a>
+                        <a href="../treinamentos_workspace/index.html"><i class="fa-solid fa-layer-group"></i>
+                            Treinamentos</a>
+                        <a href="../dashboard_interativos/index.html"><i class="fa-solid fa-chart-line"></i>
+                            Dashboards</a>
+                        <a href="../projeto_web/"><i class="fa-solid fa-laptop-code"></i> Web Dev</a>
+                        <a href="../projeto_apps/"><i class="fa-solid fa-mobile-screen-button"></i> Criador de APPs</a>
+                        <a href="../projeto_ia/"><i class="fa-solid fa-robot"></i> Inteligência Artificial</a>
+                    </div>
+                </div>
+
+                <a href="mailto:dataapex25@gmail.com"
+                    style="color: var(--text-main); text-decoration: none; font-size: 1.2rem;">
+                    <i class="fa-regular fa-envelope"></i>
+                </a>
+
             </div>
         </div>
     </nav>
